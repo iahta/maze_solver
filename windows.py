@@ -2,12 +2,10 @@ from tkinter import Tk, BOTH, Canvas
 
 class Window():
     def __init__(self, width, height):
-        self.__width = width
-        self.__height = height
         self.__root = Tk()
         self.__root.title("Maze Solver")
-        self.__painter = Canvas(self.__root, height=self.__height, width=self.__width)
-        self.__painter.pack()
+        self.__painter = Canvas(self.__root, bg="white", height=height, width=width)
+        self.__painter.pack(fill=BOTH, expand=1)
         self.__is_open = False
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
 
@@ -19,16 +17,26 @@ class Window():
         self.__is_open = True
         while self.__is_open:
             self.redraw()
-        
+
+    def draw_line(self, line, fill_color="black"):
+        line.draw(self.__painter, fill_color)    
+
     def close(self):
         self.__is_open = False
-    
-
-def main():
-    win = Window(800, 600)
-    win.wait_for_close()
-
-if __name__ == "__main__":
-    main()
 
 
+class Point():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class Line():
+    def __init__(self, p1, p2):
+        self.p1 = p1
+        self.p2 = p2
+
+    def draw(self, canvas, fill_color="black"):
+        canvas.create_line(
+            self.p1.x, self.p1.y, self.p2.x, self.p2.y, fill=fill_color, width=2
+            )
+        
