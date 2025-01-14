@@ -1,13 +1,25 @@
 from windows import Window
 from cell import Cell
+from maze import Maze
 
 def main():
     win = Window(800, 600)
+    
     #l = Line(Point(20, 20), Point(200, 200))
     #l2 = Line(Point(200, 200), Point(500, 500))
     #win.draw_line(l, "black")
     #win.draw_line(l2, "red")
-    c1 = Cell(win)
+    #MAze(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win)
+    maze = Maze(50, 50, 10, 10, 30, 30, win)
+
+    win.wait_for_close()
+    
+
+if __name__ == "__main__":
+    main()
+
+
+"""    c1 = Cell(win)
     c1.has_right_wall = False
     c1.draw(50, 50, 100, 100)
 
@@ -29,10 +41,4 @@ def main():
     c4.has_left_wall = False
     c4.draw(150, 100, 200, 150)
 
-    c3.draw_move(c4, True)
-
-
-    win.wait_for_close()
-
-if __name__ == "__main__":
-    main()
+    c3.draw_move(c4, True)"""
