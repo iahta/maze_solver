@@ -32,6 +32,21 @@ class Cell():
             line = Line(Point(x1, y2), Point(x2, y2))
             self._win.draw_line(line)
 
+        if not self.has_left_wall:
+            line = Line(Point(x1, y1), Point(x1, y2))
+            self._win.draw_line(line, "white")
+        if not self.has_right_wall:
+            line = Line(Point(x2, y1), Point(x2, y2))
+            self._win.draw_line(line, "white")
+        if not self.has_top_wall:
+            line = Line(Point(x1, y1), Point(x2, y1))
+            self._win.draw_line(line, "white")
+        if not self.has_bottom_wall:
+            line = Line(Point(x1, y2), Point(x2, y2))
+            self._win.draw_line(line, "white")
+        
+            
+
     def draw_move(self, to_cell, undo=False):
         if self._win is None:
             return
