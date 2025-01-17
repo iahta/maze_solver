@@ -2,10 +2,11 @@ from windows import Window
 from cell import Cell
 import time
 import random
+import inspect
 
 class Maze():
     def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win=None, seed=None):
-        if  seed:
+        if seed:
             random.seed(seed)
 
         self.x1 = x1
@@ -19,6 +20,7 @@ class Maze():
         self._create_cells()
         self._break_entrance_and_exit()
         self._break_walls_r(0, 0)
+        self._reset_cells_visited()
         
 
     def _validate_dimensions(self):
@@ -68,32 +70,29 @@ class Maze():
         self._cells[-1][-1].has_bottom_wall = False
         self._draw_cell((len(self._cells) - 1), (len(self._cells[-1]) - 1))
 
+    
     def _break_walls_r(self, i, j):
         self._cells[i][j].visited = True
         while True:
             need_to_visit = []
             if i > 0:  # Check cell above
-                above = self._cells[i - 1][j]
-                if above.visited == False:
-                    need_to_visit.append((i-1, j))
+                if not self._cells[i - 1][j].visited:
+                    need_to_visit.append((i - 1, j))
             if i < len(self._cells) - 1:  # Check cell below
-                below = self._cells[i + 1][j]
-                if below.visited == False:
+                if not self._cells[i + 1][j].visited:
                     need_to_visit.append((i + 1, j))
             if j > 0:  # Check cell left
-                left = self._cells[i][j - 1]
-                if left.visited == False:
+                if not self._cells[i][j - 1].visited:
                     need_to_visit.append((i, j - 1))
             if j < len(self._cells[0]) - 1:  # Check cell right
-                right = self._cells[i][j + 1]
-                if right.visited == False:
+                if not self._cells[i][j + 1].visited:
                     need_to_visit.append((i, j + 1))
             if len(need_to_visit) == 0:
-                return self._draw_cell(i,j)
+                self._draw_cell(i, j)
+                return
             else:
                 direction = random.randrange(len(need_to_visit))
                 next_i, next_j = need_to_visit[direction]
-
                 if next_i == i - 1:
                     self._cells[i][j].has_top_wall = False
                     self._cells[next_i][next_j].has_bottom_wall = False
@@ -111,7 +110,17 @@ class Maze():
                     self._cells[next_i][next_j].has_left_wall = False
                 self._break_walls_r(next_i, next_j)
 
-                
+
+    def _reset_cells_visited(self):
+        for column in self._cells:
+            for cell in column:
+                cell.visited = False
+
+    def solve(self):
+        self._solve_r(0,0)
+
+    def _solve_r(self, i, j):
+
 
     """def _get_unvisited_neighbors(self, i, j):
     neighbors = []

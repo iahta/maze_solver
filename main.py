@@ -3,15 +3,30 @@ from cell import Cell
 from maze import Maze
 
 def main():
-    win = Window(800, 600)
-    
+    num_rows = 12
+    num_cols = 16
+    margin = 50
+    screen_x = 800
+    screen_y = 600
+    cell_size_x = (screen_x - 2 * margin) / num_cols
+    cell_size_y = (screen_y - 2 * margin) / num_rows
+    win = Window(screen_x, screen_y)
     #l = Line(Point(20, 20), Point(200, 200))
     #l2 = Line(Point(200, 200), Point(500, 500))
     #win.draw_line(l, "black")
     #win.draw_line(l2, "red")
     #MAze(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win)
-    maze = Maze(50, 50, 10, 10, 30, 30, win)
+    maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win, 10)
 
+    """num_rows = 12
+    num_cols = 16
+    margin = 50
+    
+    cell_size_x = (screen_x - 2 * margin) / num_cols
+    cell_size_y = (screen_y - 2 * margin) / num_rows
+
+    maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win, 10)
+"""
     win.wait_for_close()
     
 
