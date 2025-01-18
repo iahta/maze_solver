@@ -17,6 +17,7 @@ def main():
     #win.draw_line(l2, "red")
     #MAze(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win)
     maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win, 10)
+    maze.solve()
 
     """num_rows = 12
     num_cols = 16
