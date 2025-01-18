@@ -117,50 +117,37 @@ class Maze():
                 cell.visited = False
 
     def solve(self):
-        self._solve_r(0,0)
+        return self._solve_r(0,0)
+         
 
     def _solve_r(self, i, j):
         self._animate()
         self._cells[i][j].visited = True
-        if self._cells[i][j] == self._cells[-1][-1]:
+        current_cell = self._cells[i][j]
+        if current_cell == self._cells[-1][-1]:
             return True
-        if i > 0:  # Check cell above
-                if (self._cells[i][j].has_top_wall == False) and (self._cells[i -1][j].has_bottom_wall == False):
-                    if not self._cells[i - 1][j].visited:
-                        self._cells[i][j].draw_move(self._cells[i - 1][j])
-                        check_above = self._solve_r(i - 1, j)
-                        if not check_above:
-                            self._cells[i][j].draw_move(self._cells[i - 1][j], True)
-                        else:
-                            return True
-        if i < len(self._cells) - 1:  # Check cell below
-                if (self._cells[i][j].has_bottom_wall == False) and (self._cells[i + 1][j].has_top_wall == False):
-                    if not self._cells[i + 1][j].visited:
-                        self._cells[i][j].draw_move(self._cells[i + 1][j])
-                        check_above = self._solve_r(i + 1, j)
-                        if not check_above:
-                                self._cells[i][j].draw_move(self._cells[i + 1][j], True)
-                        else:
-                                return True
-        if j > 0:  # Check cell left
-                if (self._cells[i][j].has_left_wall == False) and (self._cells[i][j - 1].has_right_wall == False):
-                    if not self._cells[i][j - 1].visited:
-                        self._cells[i][j].draw_move(self._cells[i][j - 1])
-                        check_above = self._solve_r(i, j - 1)
-                        if not check_above:
-                                self._cells[i][j].draw_move(self._cells[i][j - 1], True)
-                        else:
-                                return True
-        if j < len(self._cells[0]) - 1:  # Check cell right
-                if (self._cells[i][j].has_right_wall == False) and (self._cells[i][j + 1].has_left_wall == False):
-                    if not self._cells[i][j + 1].visited:
-                        self._cells[i][j].draw_move(self._cells[i][j + 1])
-                        check_above = self._solve_r(i, j + 1)
-                        if not check_above:
-                                self._cells[i][j].draw_move(self._cells[i][j + 1], True)
-                        else:
-                                return True
-                    
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # up, down, left, right
+        for di, dj in directions:
+            new_i = i + di
+            new_j = j + dj
+            if (0 <= new_i < len(self._cells)) and (0 <= new_j < len(self._cells[0])):
+                next_cell = self._cells[new_i][new_j]
+                can_move = False
+                if di == -1:
+                    can_move = not current_cell.has_top_wall and not next_cell.has_bottom_wall  # Check cell above
+                elif di == 1:
+                    can_move = not current_cell.has_bottom_wall and not next_cell.has_top_wall #check below
+                elif dj == -1:
+                    can_move = not current_cell.has_left_wall and not next_cell.has_right_wall #check left
+                elif dj == 1:
+                    can_move = not current_cell.has_right_wall and not next_cell.has_left_wall #check right
+                if can_move and not next_cell.visited:
+                    current_cell.draw_move(next_cell)
+                    check_direction = self._solve_r(new_i, new_j)
+                    if not check_direction:
+                        current_cell.draw_move(next_cell, True)
+                    else:
+                        return True               
         return False
     
         #for each direction, no walls blocking cell not be vistited
